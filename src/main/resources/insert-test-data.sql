@@ -86,3 +86,11 @@ VALUES
     (8, 8),
     (9, 9),
     (10, 10);
+
+INSERT INTO Users (Username, Password, RoleID)
+VALUES
+    --      Password: 'test'
+    ('testSuperuser', '$2a$10$2ZIWyQ.XypgCWtAwZuvQ8eFrB22axyQ5AViXFohbQkx4OSNwAo1Pe', 0),
+    ('testHr', '$2a$10$kYDeuiP/Dj.FQoLC.frLD.01cDP97oXrddu9XsCkV1raROA7J4FjO', 1),
+    ('testManagement', '$2a$10$kYDeuiP/Dj.FQoLC.frLD.01cDP97oXrddu9XsCkV1raROA7J4FjO', 2),
+    ('testSales', '$2a$10$NcnW9mZZFPjvHeyhFvRRX.qphy6e5GLhiifSUFJcWFcxQJl9/bfNK', 3)

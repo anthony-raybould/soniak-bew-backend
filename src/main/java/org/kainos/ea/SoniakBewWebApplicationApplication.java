@@ -1,6 +1,7 @@
 package org.kainos.ea;
 
 import io.dropwizard.Application;
+import io.dropwizard.auth.Auth;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.federecio.dropwizard.swagger.SwaggerBundle;
@@ -39,6 +40,7 @@ public class SoniakBewWebApplicationApplication extends Application<SoniakBewWeb
         environment.jersey().register(new ProjectController());
         environment.jersey().register(new SalesEmployeeController());
         environment.jersey().register(new ClientController());
+        environment.jersey().register(new AuthController());
     }
 
 }
