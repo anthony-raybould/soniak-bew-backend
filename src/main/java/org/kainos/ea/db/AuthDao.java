@@ -3,6 +3,7 @@ package org.kainos.ea.db;
 import org.apache.commons.lang3.time.DateUtils;
 import org.kainos.ea.cli.LoginRequest;
 import org.kainos.ea.cli.Role;
+import org.kainos.ea.cli.User;
 import org.kainos.ea.client.TokenExpiredException;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -62,4 +63,26 @@ public class AuthDao {
         ps.executeUpdate();
     }
 
+    public User validateToken(String token) throws SQLException, TokenExpiredException {
+        Connection c = databaseConnector.getConnection();
+
+        PreparedStatement ps = c.prepareStatement("SELECT Username, RoleID, Expiry FROM `Users` JOIN Tokens USING (UserID) WHERE Token=?");
+
+        ps.setString(1, token);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Timestamp expiry = rs.getTimestamp("Expiry");
+
+            if (expiry.after(new Date())) {
+                return new User(
+                        rs.getString("Username"),
+                        Role.fromId(rs.getInt("RoleID"))
+                );
+            }
+        }
+
+        throw new TokenExpiredException();
+    }
 }

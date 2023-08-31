@@ -1,12 +1,10 @@
 package org.kainos.ea;
 
 import io.dropwizard.Application;
-import io.dropwizard.auth.Auth;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.federecio.dropwizard.swagger.SwaggerBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
-import org.kainos.ea.client.FailedToGetProjectException;
 import org.kainos.ea.resources.*;
 
 public class SoniakBewWebApplicationApplication extends Application<SoniakBewWebApplicationConfiguration> {

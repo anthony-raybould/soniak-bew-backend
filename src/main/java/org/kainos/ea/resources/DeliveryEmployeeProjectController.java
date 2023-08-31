@@ -3,8 +3,10 @@ package org.kainos.ea.resources;
 import io.swagger.annotations.Api;
 import org.kainos.ea.api.DeliveryEmployeesProjectsService;
 import org.kainos.ea.api.ProjectService;
+import org.kainos.ea.auth.AccessValidator;
 import org.kainos.ea.cli.AssignDeliveryEmployeesRequest;
 import org.kainos.ea.cli.DeliveryEmployee;
+import org.kainos.ea.cli.Role;
 import org.kainos.ea.client.*;
 import org.kainos.ea.core.DeliveryEmployeeProjectValidator;
 import org.kainos.ea.core.ProjectValidator;
@@ -32,9 +34,11 @@ public class DeliveryEmployeeProjectController {
     @POST
     @Path("/deliveryemployeeproject")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createDeliveryEmployeeProjectAssignment(AssignDeliveryEmployeesRequest request) {
+    public Response createDeliveryEmployeeProjectAssignment(AssignDeliveryEmployeesRequest request, @QueryParam("token") String token) {
 
         try {
+            AccessValidator.validateAccess(token, Role.MANAGEMENT);
+
             deliveryEmployeesProjectsService.assignDeliveryEmployees(request);
             return Response.ok().build();
 
@@ -44,15 +48,21 @@ public class DeliveryEmployeeProjectController {
         } catch (FailedToGetDeliveryEmployeeProjectException | FailedToAssignDeliveryEmployeesException | FailedToGetProjectException | FailedToGetDeliveryEmployeesException e) {
             System.err.println(e.getMessage());
             return Response.serverError().build();
+        } catch (AccessValidationException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch (ForbiddenAccessException e) {
+            return Response.status(Response.Status.FORBIDDEN).entity(e.getMessage()).build();
         }
     }
 
     @DELETE
     @Path("/deliveryemployeeproject/{projectId}/employee/{deliveryEmployeeId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response removeDeliveryEmployeeProjectAssignment(@PathParam("deliveryEmployeeId") int deliveryEmployeeId, @PathParam("projectId") int projectId) {
+    public Response removeDeliveryEmployeeProjectAssignment(@PathParam("deliveryEmployeeId") int deliveryEmployeeId, @PathParam("projectId") int projectId, @QueryParam("id") String token) {
 
         try {
+            AccessValidator.validateAccess(token, Role.MANAGEMENT);
+
             deliveryEmployeesProjectsService.removeDeliveryEmployeeProject(deliveryEmployeeId, projectId);
             return Response.ok().build();
 
@@ -62,6 +72,10 @@ public class DeliveryEmployeeProjectController {
         } catch (FailedToGetDeliveryEmployeeProjectException | FailedToRemoveDeliveryEmployeeProjectException e) {
             System.err.println(e.getMessage());
             return Response.serverError().build();
+        } catch (AccessValidationException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch (ForbiddenAccessException e) {
+            return Response.status(Response.Status.FORBIDDEN).entity(e.getMessage()).build();
         }
     }
 }
