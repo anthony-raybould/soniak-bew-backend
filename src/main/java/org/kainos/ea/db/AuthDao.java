@@ -53,11 +53,11 @@ public class AuthDao {
     public void register(String username, String password, Role role) throws SQLException {
         Connection c = databaseConnector.getConnection();
 
-        PreparedStatement ps = c.prepareStatement("INSERT INTO `Users` (Username, Password, Role) VALUES (?, ?, ?)");
+        PreparedStatement ps = c.prepareStatement("INSERT INTO `Users` (Username, Password, RoleID) VALUES (?, ?, ?)");
 
         ps.setString(1, username);
         ps.setString(2, password);
-        ps.setString(3, role.toString());
+        ps.setInt(3, role.getRoleId());
 
         ps.executeUpdate();
     }

@@ -82,13 +82,28 @@ DeliveryEmployees_Projects (
 
 -- Authentication
 CREATE TABLE IF NOT EXISTS
+Roles (
+    RoleID smallint unsigned NOT NULL,
+    Name varchar(64) NOT NULL,
+    PRIMARY KEY (RoleID)
+);
+
+INSERT INTO Roles (RoleID, Name)
+VALUES
+    (0, 'SUPERUSER'),
+    (1, 'HR'),
+    (2, 'MANAGEMENT'),
+    (3, 'SALES');
+
+CREATE TABLE IF NOT EXISTS
 Users (
     UserID   smallint unsigned NOT NULL AUTO_INCREMENT,
     Username varchar(64) NOT NULL,
     Password varchar(255) NOT NULL,
-    Role     enum('superuser', 'hr', 'management', 'sales'),
+    RoleID   smallint unsigned NOT NULL,
     PRIMARY KEY (UserID),
-    UNIQUE (UserID)
+    UNIQUE (Username),
+    FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
 );
 
 CREATE TABLE IF NOT EXISTS
@@ -97,4 +112,4 @@ Tokens (
     Token  varchar(64) NOT NULL,
     Expiry datetime NOT NULL,
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
-)
+);
