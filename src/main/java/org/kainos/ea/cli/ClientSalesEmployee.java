@@ -2,11 +2,14 @@ package org.kainos.ea.cli;
 
 public class ClientSalesEmployee {
     private String clientName;
+
+    private int clientId;
     private String salesEmployeeName;
     private String projects;
 
-    public ClientSalesEmployee(String clientName, String salesEmployeeName, String projects) {
+    public ClientSalesEmployee(String clientName, int clientId, String salesEmployeeName, String projects) {
         this.clientName = clientName;
+        this.clientId = clientId;
         this.salesEmployeeName = salesEmployeeName;
         this.projects = projects;
     }
@@ -35,4 +38,11 @@ public class ClientSalesEmployee {
         this.projects = projects;
     }
 
+    public int getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
+    }
 }

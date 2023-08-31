@@ -37,6 +37,7 @@ public class ClientDao {
         Statement st = c.createStatement();
 
         ResultSet rs = st.executeQuery("SELECT Clients.Name AS \"Client Name\", " +
+                "Clients.ClientID AS \"Client ID\", " +
                 "Employees.Name AS \"Sales Employee Name\", " +
                 "GROUP_CONCAT(Projects.Name) AS Projects FROM Clients " +
                 "JOIN SalesEmployees USING (EmployeeID) " +
@@ -49,6 +50,7 @@ public class ClientDao {
         while (rs.next()) {
             ClientSalesEmployee clientSalesEmployee = new ClientSalesEmployee(
                     rs.getString("Client Name"),
+                    rs.getInt("Client ID"),
                     rs.getString("Sales Employee Name"),
                     rs.getString("Projects")
             );
