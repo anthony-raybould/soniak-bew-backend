@@ -1,9 +1,12 @@
 package org.kainos.ea.resources;
 
 import io.swagger.annotations.Api;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.kainos.ea.api.AuthService;
 import org.kainos.ea.cli.LoginRequest;
+import org.kainos.ea.cli.LoginResponse;
 import org.kainos.ea.cli.RegisterRequest;
+import org.kainos.ea.cli.User;
 import org.kainos.ea.client.FailedToGenerateTokenException;
 import org.kainos.ea.client.FailedToLoginException;
 import org.kainos.ea.client.FailedToRegisterException;
@@ -24,7 +27,13 @@ public class AuthController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(LoginRequest login) {
         try {
-            return Response.ok(authService.login(login)).build();
+            ImmutablePair<User, String> response = authService.login(login);
+            LoginResponse loginResponse = new LoginResponse(
+                    response.right,
+                    response.left.getUsername(),
+                    response.left.getRole()
+            );
+            return Response.ok(loginResponse).build();
         } catch (FailedToLoginException e) {
             System.err.println(e.getMessage());
 

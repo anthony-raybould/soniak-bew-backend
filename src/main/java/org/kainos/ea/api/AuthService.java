@@ -1,7 +1,9 @@
 package org.kainos.ea.api;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.kainos.ea.cli.LoginRequest;
 import org.kainos.ea.cli.RegisterRequest;
+import org.kainos.ea.cli.User;
 import org.kainos.ea.client.FailedToGenerateTokenException;
 import org.kainos.ea.client.FailedToLoginException;
 import org.kainos.ea.client.FailedToRegisterException;
@@ -13,12 +15,12 @@ import java.sql.SQLException;
 public class AuthService {
     private final AuthDao authDao = new AuthDao();
 
-    public String login(LoginRequest login) throws FailedToLoginException, FailedToGenerateTokenException {
+    public ImmutablePair<User, String> login(LoginRequest login) throws FailedToLoginException, FailedToGenerateTokenException {
         try {
-            int id = authDao.validLogin(login);
-            if (id != -1) {
+            User user = authDao.validLogin(login);
+            if (user != null) {
                 try {
-                    return authDao.generateToken(id);
+                    return new ImmutablePair<>(user, authDao.generateToken(user.getUserId()));
                 } catch (SQLException e) {
                     e.printStackTrace();
 
