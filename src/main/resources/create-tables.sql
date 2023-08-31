@@ -28,7 +28,7 @@ DeliveryEmployees (
 -- Clients
 CREATE TABLE IF NOT EXISTS
 Clients (
-	ClientID    smallint unsigned AUTO_INCREMENT NOT NULL,
+    ClientID    smallint unsigned AUTO_INCREMENT NOT NULL,
     Name        varchar(70) NOT NULL,
     Address     varchar(255) NOT NULL,
     PhoneNumber char(11) NOT NULL,
@@ -41,7 +41,7 @@ Clients (
 -- Projects
 CREATE TABLE IF NOT EXISTS
 Projects (
-	ProjectID smallint unsigned AUTO_INCREMENT,
+    ProjectID smallint unsigned AUTO_INCREMENT,
     Name      varchar(100) NOT NULL,
     Value     decimal(15,2) NOT NULL,
     TechLead  smallint unsigned NOT NULL,
@@ -55,7 +55,7 @@ Projects (
 
 CREATE TABLE IF NOT EXISTS
 Technologies (
-	TechnologiesID smallint UNSIGNED AUTO_INCREMENT,
+    TechnologiesID smallint UNSIGNED AUTO_INCREMENT,
     Name           varchar(100) NOT NULL,
     Description    varchar(255) NOT NULL,
     PRIMARY KEY (TechnologiesID)
@@ -78,3 +78,23 @@ DeliveryEmployees_Projects (
     FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID),
     PRIMARY KEY (EmployeeID, ProjectID)
 );
+
+
+-- Authentication
+CREATE TABLE IF NOT EXISTS
+Users (
+    UserID   smallint unsigned NOT NULL AUTO_INCREMENT,
+    Username varchar(64) NOT NULL,
+    Password varchar(255) NOT NULL,
+    Role     enum('superuser', 'hr', 'management', 'sales'),
+    PRIMARY KEY (UserID),
+    UNIQUE (UserID)
+);
+
+CREATE TABLE IF NOT EXISTS
+Tokens (
+	UserID smallint unsigned NOT NULL,
+    Token  varchar(64) NOT NULL,
+    Expiry datetime NOT NULL,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+)
