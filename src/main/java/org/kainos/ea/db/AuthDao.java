@@ -15,10 +15,10 @@ import java.util.UUID;
 public class AuthDao {
     private final DatabaseConnector databaseConnector = new DatabaseConnector();
 
-    public int validLogin(LoginRequest login) throws SQLException {
+    public User validLogin(LoginRequest login) throws SQLException {
         Connection c = databaseConnector.getConnection();
 
-        PreparedStatement ps = c.prepareStatement("SELECT UserID, Password FROM `Users` WHERE Username=?;");
+        PreparedStatement ps = c.prepareStatement("SELECT UserID, Username, Password, RoleID FROM `Users` WHERE Username=?;");
 
         ps.setString(1, login.getUsername());
 
@@ -28,11 +28,15 @@ public class AuthDao {
             String hashedPassword = rs.getString("Password");
             String candidatePassword = login.getPassword();
             if (BCrypt.checkpw(candidatePassword, hashedPassword)) {
-                return rs.getInt("UserID");
+                return new User(
+                        rs.getInt("UserID"),
+                        rs.getString("Username"),
+                        Role.fromId(rs.getInt("RoleID"))
+                );
             }
         }
 
-        return -1;
+        return null;
     }
 
     public String generateToken(int userId) throws SQLException {
@@ -66,7 +70,7 @@ public class AuthDao {
     public User validateToken(String token) throws SQLException, TokenExpiredException {
         Connection c = databaseConnector.getConnection();
 
-        PreparedStatement ps = c.prepareStatement("SELECT Username, RoleID, Expiry FROM `Users` JOIN Tokens USING (UserID) WHERE Token=?");
+        PreparedStatement ps = c.prepareStatement("SELECT UserID, Username, RoleID, Expiry FROM `Users` JOIN Tokens USING (UserID) WHERE Token=?");
 
         ps.setString(1, token);
 
@@ -77,6 +81,7 @@ public class AuthDao {
 
             if (expiry.after(new Date())) {
                 return new User(
+                        rs.getInt("UserID"),
                         rs.getString("Username"),
                         Role.fromId(rs.getInt("RoleID"))
                 );
