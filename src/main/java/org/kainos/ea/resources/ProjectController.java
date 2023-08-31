@@ -25,7 +25,7 @@ public class ProjectController {
     @GET
     @Path("/project")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProjects(@QueryParam("id") String token) {
+    public Response getProjects(@QueryParam("token") String token) {
         try {
             AccessValidator.validateAccess(token, Role.MANAGEMENT, Role.SALES, Role.HR);
 
@@ -42,7 +42,7 @@ public class ProjectController {
     @POST
     @Path("/project")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createProject(ProjectRequest request, @QueryParam("id") String token) {
+    public Response createProject(ProjectRequest request, @QueryParam("token") String token) {
         try {
             AccessValidator.validateAccess(token, Role.MANAGEMENT, Role.SALES, Role.HR);
 
@@ -63,7 +63,7 @@ public class ProjectController {
     @PUT
     @Path("/project/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateProject(@PathParam("id") int id, ProjectRequest request, @QueryParam("id") String token) {
+    public Response updateProject(@PathParam("id") int id, ProjectRequest request, @QueryParam("token") String token) {
         try {
             AccessValidator.validateAccess(token, Role.MANAGEMENT, Role.SALES, Role.HR);
 

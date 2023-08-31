@@ -58,7 +58,7 @@ public class DeliveryEmployeeProjectController {
     @DELETE
     @Path("/deliveryemployeeproject/{projectId}/employee/{deliveryEmployeeId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response removeDeliveryEmployeeProjectAssignment(@PathParam("deliveryEmployeeId") int deliveryEmployeeId, @PathParam("projectId") int projectId, @QueryParam("id") String token) {
+    public Response removeDeliveryEmployeeProjectAssignment(@PathParam("deliveryEmployeeId") int deliveryEmployeeId, @PathParam("projectId") int projectId, @QueryParam("token") String token) {
 
         try {
             AccessValidator.validateAccess(token, Role.MANAGEMENT);
