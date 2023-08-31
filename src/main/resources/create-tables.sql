@@ -93,7 +93,7 @@ Users (
 
 CREATE TABLE IF NOT EXISTS
 Tokens (
-	UserID smallint unsigned NOT NULL,
+    UserID smallint unsigned NOT NULL,
     Token  varchar(64) NOT NULL,
     Expiry datetime NOT NULL,
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
